@@ -1,0 +1,88 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DraftAgent.App.ViewModels"
+        x:Class="DraftAgent.App.Views.EmotionEditorWindow"
+        x:DataType="vm:EmotionEditorSessionViewModel"
+        Width="400"
+        Height="248"
+        MinWidth="390"
+        MinHeight="240"
+        CanResize="False"
+        WindowDecorations="None"
+        Background="#0F1724"
+        ShowInTaskbar="False">
+    <Border Background="#0F1724"
+            BorderBrush="#334155"
+            BorderThickness="1"
+            CornerRadius="6"
+            Padding="8">
+        <Grid RowDefinitions="Auto,*" RowSpacing="6">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="6">
+                <StackPanel Spacing="0">
+                    <TextBlock Text="{Binding SubjectName}"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Left"/>
+                    <TextBlock Text="{Binding DisplayText}"
+                               Classes="muted"
+                               FontSize="11"
+                               HorizontalAlignment="Left"/>
+                </StackPanel>
+                <Button Grid.Column="2"
+                        Content="取消"
+                        Classes="compact"
+                        Click="CancelWindow"/>
+                <Button Grid.Column="3"
+                        Content="保存"
+                        Classes="primary compact"
+                        Click="SaveWindow"/>
+            </Grid>
+
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding EmotionVectors}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="4" Columns="2"
+                                     VerticalAlignment="Stretch"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Styles>
+                    <Style Selector="ContentPresenter">
+                        <Setter Property="Margin" Value="3,2"/>
+                    </Style>
+                </ItemsControl.Styles>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:EmotionVectorViewModel">
+                        <Border Background="#111B2A"
+                                BorderBrush="#253247"
+                                BorderThickness="1"
+                                CornerRadius="5"
+                                Padding="5,3"
+                                MinHeight="34">
+                            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="4">
+                                <TextBlock Text="{Binding DisplayName}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14"
+                                           VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding Value, StringFormat='{}{0:0.##}'}"
+                                           Classes="muted"
+                                           FontSize="13"
+                                           MinWidth="22"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"/>
+                                <Slider Grid.Column="2"
+                                        Minimum="0"
+                                        Maximum="1.2"
+                                        TickFrequency="0.1"
+                                        IsSnapToTickEnabled="False"
+                                        MinWidth="88"
+                                        VerticalAlignment="Center"
+                                        Value="{Binding Value, Mode=TwoWay}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Border>
+</Window>

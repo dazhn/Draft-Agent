@@ -1,0 +1,4 @@
+[submodule "src/PsdLayerLoader.Native/third_party/psd_sdk"]
+	path = src/PsdLayerLoader.Native/third_party/psd_sdk
+	url = https://github.com/MolecularMatters/psd_sdk.git
+	branch = master

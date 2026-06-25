@@ -1,0 +1,611 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="DraftAgent.App.App"
+             xmlns:local="using:DraftAgent.App"
+             RequestedThemeVariant="Dark">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+    <Application.Resources>
+        <local:ImageAssetPreviewConverter x:Key="ImageAssetPreviewConverter"/>
+    </Application.Resources>
+
+    <Application.Styles>
+        <FluentTheme />
+        <Style Selector="Window">
+            <Setter Property="FontFamily" Value="Inter, Segoe UI, Microsoft YaHei" />
+            <Setter Property="Background" Value="#0C0F14" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+        </Style>
+        <Style Selector="TextBlock">
+            <Setter Property="Foreground" Value="#E7EAF0" />
+        </Style>
+        <Style Selector="TextBlock.muted">
+            <Setter Property="Foreground" Value="#8E98A8" />
+        </Style>
+        <Style Selector="TextBlock.small">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Background" Value="#1B2230" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+        </Style>
+        <Style Selector="Button.compact">
+            <Setter Property="Padding" Value="6,5" />
+            <Setter Property="MinWidth" Value="0" />
+        </Style>
+        <Style Selector="Button.sceneCollapseButton">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="MinWidth" Value="32" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#3B82F6" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="#60A5FA" />
+        </Style>
+        <Style Selector="Button.danger">
+            <Setter Property="Background" Value="#3A1820" />
+            <Setter Property="Foreground" Value="#FDA4AF" />
+            <Setter Property="BorderBrush" Value="#7F1D1D" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8,5" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style Selector="AutoCompleteBox">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="MinHeight" Value="32" />
+        </Style>
+        <Style Selector="NumericUpDown">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="Slider">
+            <Setter Property="MinHeight" Value="28" />
+        </Style>
+        <Style Selector="Expander">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Border.shell">
+            <Setter Property="Background" Value="#0C0F14" />
+        </Style>
+        <Style Selector="Border.appHeader">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style Selector="Border.exportPreflightPanel">
+            <Setter Property="Background" Value="#1C1824" />
+            <Setter Property="BorderBrush" Value="#6D5A2B" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="7" />
+        </Style>
+        <Style Selector="Border.panel">
+            <Setter Property="Background" Value="#121824" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style Selector="Border.layoutPanel">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="Border.sectionHeader">
+            <Setter Property="Background" Value="#121824" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+        </Style>
+        <Style Selector="Border.scriptCanvas">
+            <Setter Property="Background" Value="#0F1520" />
+        </Style>
+        <Style Selector="Border.workbenchCanvas">
+            <Setter Property="Background" Value="#0F1520" />
+        </Style>
+        <Style Selector="ListBox.workbenchSceneList">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="ListBox.workbenchSceneList > ListBoxItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="ListBox.workbenchSceneList > ListBoxItem:pointerover,
+                         ListBox.workbenchSceneList > ListBoxItem:selected,
+                         ListBox.workbenchSceneList > ListBoxItem:selected:pointerover,
+                         ListBox.bindingTargetList > ListBoxItem:pointerover,
+                         ListBox.bindingTargetList > ListBoxItem:selected,
+                         ListBox.bindingTargetList > ListBoxItem:selected:pointerover">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBox.workbenchSceneList > ListBoxItem:pointerover /template/ ContentPresenter,
+                         ListBox.workbenchSceneList > ListBoxItem:selected /template/ ContentPresenter,
+                         ListBox.workbenchSceneList > ListBoxItem:selected:pointerover /template/ ContentPresenter,
+                         ListBox.bindingTargetList > ListBoxItem:pointerover /template/ ContentPresenter,
+                         ListBox.bindingTargetList > ListBoxItem:selected /template/ ContentPresenter,
+                         ListBox.bindingTargetList > ListBoxItem:selected:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBox.bindingTargetList">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="ListBox.bindingTargetList > ListBoxItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0,0,10,10" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+        <Style Selector="TextBox.scriptEditor">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="10" />
+        </Style>
+        <Style Selector="Button.scriptTabClose">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="MinWidth" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#172033" />
+            <Setter Property="BorderBrush" Value="#334155" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style Selector="Border.toolbar">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style Selector="Border.metric">
+            <Setter Property="Background" Value="#0F1520" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="9,5" />
+        </Style>
+        <Style Selector="Border.sceneBlock">
+            <Setter Property="Background" Value="#0F1520" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style Selector="Border.referenceScene">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="7" />
+            <Setter Property="ClipToBounds" Value="True" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.12"/>
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.12"/>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.12"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Border.referenceSceneHeader">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+        </Style>
+        <Style Selector="Border.sceneIndex">
+            <Setter Property="Background" Value="#172033" />
+            <Setter Property="BorderBrush" Value="#334155" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8,5" />
+        </Style>
+        <Style Selector="Border.sceneThumb">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="Button.sceneDragHandle">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="MinWidth" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="Button.sceneDragHandle:pointerover">
+            <Setter Property="Background" Value="#172033" />
+            <Setter Property="BorderBrush" Value="#3B82F6" />
+        </Style>
+        <Style Selector="Button.sceneDragHandle TextBlock">
+            <Setter Property="Foreground" Value="#8E98A8" />
+        </Style>
+        <Style Selector="Button.sceneDragHandle:pointerover TextBlock">
+            <Setter Property="Foreground" Value="#D7E6FF" />
+        </Style>
+        <Style Selector="Button.sceneSquareButton">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="MinWidth" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Button.sceneSquareButton:pointerover">
+            <Setter Property="Background" Value="#172033" />
+            <Setter Property="BorderBrush" Value="#3B82F6" />
+        </Style>
+        <Style Selector="Button.roundResetButton">
+            <Setter Property="Width" Value="34" />
+            <Setter Property="MinWidth" Value="34" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="17" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Button.roundResetButton:pointerover">
+            <Setter Property="Background" Value="#172033" />
+            <Setter Property="BorderBrush" Value="#3B82F6" />
+        </Style>
+        <Style Selector="TextBox.sceneTitleInput">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBox.sceneEffectInput">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="#B8C2D6" />
+            <Setter Property="MinHeight" Value="24" />
+        </Style>
+        <Style Selector="Border.assetStrip">
+            <Setter Property="Background" Value="#0F1520" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8" />
+        </Style>
+        <Style Selector="Border.tableHeader">
+            <Setter Property="Background" Value="#101725" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="0,1,0,1" />
+            <Setter Property="Padding" Value="14,7" />
+        </Style>
+        <Style Selector="Border.tableHeader TextBlock">
+            <Setter Property="Foreground" Value="#8E98A8" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Border.tableRow">
+            <Setter Property="BorderBrush" Value="#1E293B" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="Padding" Value="14,9" />
+            <Setter Property="MinHeight" Value="68" />
+        </Style>
+        <Style Selector="Border.tableRow:pointerover">
+            <Setter Property="Background" Value="#131B29" />
+        </Style>
+        <Style Selector="Border.eventTable">
+            <Setter Property="Background" Value="#0B111A" />
+        </Style>
+        <Style Selector="Border.eventRow">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="20,0,0,6" />
+            <Setter Property="MinHeight" Value="46" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="RenderTransformOrigin" Value="50%,50%" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.1"/>
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.1"/>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.1"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Border.eventRow > Grid">
+            <Setter Property="MinHeight" Value="46" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Border.eventRow:pointerover">
+            <Setter Property="Background" Value="#0F1724" />
+            <Setter Property="BorderBrush" Value="#334155" />
+        </Style>
+        <Style Selector="Border.eventRow.selected">
+            <Setter Property="Background" Value="#10213A" />
+            <Setter Property="BorderBrush" Value="#3B82F6" />
+        </Style>
+        <Style Selector="Border.eventRow.dragSourceActive">
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.referenceScene.dragSourceActive">
+            <Setter Property="Opacity" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.dragGhost">
+            <Setter Property="Background" Value="#E6111722" />
+            <Setter Property="BorderBrush" Value="#80B7D4FF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="7" />
+            <Setter Property="BoxShadow" Value="0 14 32 0 #80000000" />
+        </Style>
+        <Style Selector="Border.dragGhostRow">
+            <Setter Property="Background" Value="#E6111722" />
+        </Style>
+        <Style Selector="Border.dragGhostScene">
+            <Setter Property="Background" Value="#E60F1B2D" />
+        </Style>
+        <Style Selector="Border.dragGhost TextBlock.dragGhostTitle">
+            <Setter Property="Foreground" Value="#F8FAFC" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Border.dragGhost TextBlock.dragGhostDetail">
+            <Setter Property="Foreground" Value="#B8C2D6" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="LineHeight" Value="17" />
+        </Style>
+        <Style Selector="Border.rowIndexCell, Border.rowObjectBox, Border.rowTypeBox, Border.rowEmotionBox, Border.rowLineBox, Border.rowVoiceBox">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#263044" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Padding" Value="8,6" />
+            <Setter Property="MinHeight" Value="46" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Border.rowIndexCell:pointerover, Border.rowObjectBox:pointerover, Border.rowTypeBox:pointerover, Border.rowEmotionBox:pointerover, Border.rowLineBox:pointerover, Border.rowVoiceBox:pointerover">
+            <Setter Property="Background" Value="#151D2B" />
+            <Setter Property="BorderBrush" Value="#334155" />
+        </Style>
+        <Style Selector="Border.rowIndexCell">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="Border.rowObjectBox">
+            <Setter Property="Padding" Value="7,6" />
+        </Style>
+        <Style Selector="Border.rowEmotionBox">
+            <Setter Property="Padding" Value="6,5" />
+        </Style>
+        <Style Selector="Border.rowTypeBox">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinWidth" Value="36" />
+            <Setter Property="Width" Value="36" />
+        </Style>
+        <Style Selector="Border.rowLineBox">
+            <Setter Property="Padding" Value="10,6" />
+        </Style>
+        <Style Selector="Border.rowVoiceBox">
+            <Setter Property="Padding" Value="4" />
+        </Style>
+        <Style Selector="TextBlock.rowNumber">
+            <Setter Property="Foreground" Value="#72809A" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Border.previewTile">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="ClipToBounds" Value="True" />
+            <Setter Property="MinHeight" Value="42" />
+        </Style>
+        <Style Selector="Border.bindingPreviewTile">
+            <Setter Property="Height" Value="110" />
+        </Style>
+        <Style Selector="Border.bindingPreviewTileLarge">
+            <Setter Property="Height" Value="150" />
+        </Style>
+        <Style Selector="Border.previewTile TextBlock">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style Selector="TextBlock.bindingSummaryLabel">
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TextBlock.bindingSummaryValue">
+            <Setter Property="Foreground" Value="#D5DBE7" />
+        </Style>
+        <Style Selector="Border.objectThumb">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="Grid.objectThumb">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="Border.objectThumb TextBlock">
+            <Setter Property="Foreground" Value="#A8B3C5" />
+        </Style>
+        <Style Selector="TextBlock.objectNameText">
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Grid.objectNameRegion">
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ComboBox.objectNameSelect">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0,0,2,0" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="MaxHeight" Value="30" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.rowEmotionBox">
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="TextBlock.sourceTypeGlyph">
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TextBlock.emotionDisplayText">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="LineHeight" Value="15" />
+        </Style>
+        <Style Selector="TextBlock.lineText">
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="LineHeight" Value="18" />
+        </Style>
+        <Style Selector="TextBox.lineEditor">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+        </Style>
+        <Style Selector="StackPanel.rowActions Button.compact">
+            <Setter Property="Width" Value="24" />
+            <Setter Property="MinWidth" Value="24" />
+            <Setter Property="Padding" Value="0,5" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.voiceBadge">
+            <Setter Property="Background" Value="#0F1724" />
+            <Setter Property="BorderBrush" Value="#1F2A3D" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="7,3" />
+            <Setter Property="MaxWidth" Value="108" />
+        </Style>
+        <Style Selector="TextBlock.voiceState">
+            <Setter Property="Foreground" Value="#E7EAF0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Border.tooltipPreview">
+            <Setter Property="Background" Value="#0B111A" />
+            <Setter Property="BorderBrush" Value="#3B82F6" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="Border.tooltipPreview TextBlock">
+            <Setter Property="Margin" Value="12" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+        </Style>
+        <Style Selector="Border.badge">
+            <Setter Property="Background" Value="#1E293B" />
+            <Setter Property="BorderBrush" Value="#334155" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8,4" />
+        </Style>
+        <Style Selector="Border.bindingCard">
+            <Setter Property="Background" Value="#111722" />
+            <Setter Property="BorderBrush" Value="#2C3546" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="8" />
+        </Style>
+        <Style Selector="Border.compactBindingCard">
+            <Setter Property="Width" Value="236" />
+            <Setter Property="MinHeight" Value="0" />
+        </Style>
+        <Style Selector="TextBox.bindingTargetNameEditor">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinHeight" Value="26" />
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="#E7EAF0" />
+        </Style>
+        <Style Selector="Button.bindingTargetDeleteButton">
+            <Setter Property="Width" Value="30" />
+            <Setter Property="MinWidth" Value="30" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="Button.bindingActionButton">
+            <Setter Property="Padding" Value="4,5" />
+            <Setter Property="MinWidth" Value="56" />
+            <Setter Property="MinHeight" Value="30" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.dialogScrim">
+            <Setter Property="Background" Value="#99000000" />
+        </Style>
+    </Application.Styles>
+</Application>

@@ -1,0 +1,17 @@
+node_modules/
+bin/
+obj/
+artifacts/
+.cache/
+src/VegasFcpxmlImporter/
+src/PsdLayerLoader.Native/build/
+tools/hf-mirror-backup/
+tools/hf-mirror-report.json
+tools/last-index-tts2-prompt.json
+target/
+src-tauri/target/
+dist/
+*.log
+*.err.log
+.DS_Store
+.vs/

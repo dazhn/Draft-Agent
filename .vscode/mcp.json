@@ -1,0 +1,7 @@
+{
+  "servers": {
+    "avalonia": {
+      "url": "https://api.avaloniaui.net/mcp"
+    }
+  }
+}
