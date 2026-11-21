@@ -1,0 +1,83 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DraftAgent.App.ViewModels"
+        x:Class="DraftAgent.App.Views.AiSettingsWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="760"
+        Height="500"
+        MinWidth="680"
+        MinHeight="380"
+        Title="AI 服务设置"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+    <Border Classes="pane" Margin="14" Padding="16">
+        <Grid RowDefinitions="Auto,*,Auto" RowSpacing="14">
+            <StackPanel Spacing="4">
+                <TextBlock Text="AI 服务设置" FontSize="20" FontWeight="SemiBold"/>
+                <TextBlock Text="选择在线模型或本地 LM Studio，并配置 ComfyUI 地址。"
+                           Classes="muted"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="170,*" RowSpacing="12" ColumnSpacing="12">
+                <TextBlock Text="服务商" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding AiProviders}"
+                          SelectedItem="{Binding SelectedAiProvider}"
+                          HorizontalAlignment="Stretch"/>
+
+                <TextBlock Grid.Row="1" Text="API Key" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         Text="{Binding AiApiKey}"
+                         Background="{Binding AiApiKeyBackground}"
+                         BorderBrush="{Binding AiApiKeyBorderBrush}"
+                         PasswordChar="●"
+                         PlaceholderText="输入 Key，LM Studio 可留空"/>
+
+                <TextBlock Grid.Row="2" Text="模型" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding AiModelName}"/>
+
+                <TextBlock Grid.Row="3" Text="最大输出 Token" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3"
+                         Grid.Column="1"
+                         Text="{Binding AiMaxOutputTokensText}"
+                         PlaceholderText="32768 - 1000000"/>
+
+                <TextBlock Grid.Row="4" Text="Base URL" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <Grid Grid.Row="4" Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <TextBox Text="{Binding AiBaseUrl}"
+                             Background="{Binding AiEndpointBackground}"
+                             BorderBrush="{Binding AiEndpointBorderBrush}"/>
+                    <Button Grid.Column="1"
+                            Content="检测模型"
+                            Command="{Binding TestAiConnectionCommand}"/>
+                </Grid>
+
+                <TextBlock Grid.Row="5" Text="ComfyUI" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <Grid Grid.Row="5" Grid.Column="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <TextBox Text="{Binding ComfyEndpoint}"
+                             Background="{Binding ComfyEndpointBackground}"
+                             BorderBrush="{Binding ComfyEndpointBorderBrush}"/>
+                    <Button Grid.Column="1"
+                            Content="检测"
+                            Command="{Binding TestComfyConnectionCommand}"/>
+                </Grid>
+
+                <TextBlock Grid.Row="6" Text="AI 接入状态" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding AiStatusText}" Classes="muted" TextWrapping="Wrap"/>
+
+                <TextBlock Grid.Row="7" Text="回复完成状态" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding AiReplyStatusText}" Classes="muted" TextWrapping="Wrap"/>
+
+                <TextBlock Grid.Row="8" Text="ComfyUI 提交状态" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="8" Grid.Column="1" Text="{Binding ComfySubmitStatusText}" Classes="muted" TextWrapping="Wrap"/>
+            </Grid>
+
+            <Grid Grid.Row="2" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                <TextBlock Text="{Binding ComfyStatusText}" Classes="muted" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Content="取消" Click="CloseWindow"/>
+                <Button Grid.Column="2" Classes="primary" Content="保存" Click="SaveAndCloseWindow"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,101 @@
+{
+  "15": {
+    "inputs": {
+      "audioUI": "",
+      "audio": [
+        "47",
+        0
+      ]
+    },
+    "class_type": "PreviewAudio",
+    "_meta": {
+      "title": "预览音频"
+    }
+  },
+  "47": {
+    "inputs": {
+      "text": "这是一个测试文本",
+      "narrator_voice": "none",
+      "seed": 1552347959,
+      "enable_chunking": true,
+      "max_chars_per_chunk": 400,
+      "chunk_combination_method": "auto",
+      "silence_between_chunks_ms": 100,
+      "enable_audio_cache": true,
+      "batch_size": 0,
+      "TTS_engine": [
+        "123",
+        0
+      ],
+      "opt_narrator": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "UnifiedTTSTextNode",
+    "_meta": {
+      "title": "🎤 TTS Text"
+    }
+  },
+  "51": {
+    "inputs": {
+      "voice_name": "ComfyUI_00038_.flac",
+      "reference_text": "The first one who physical contact was with a female with her twins and she put a hand on the top of my head."
+    },
+    "class_type": "CharacterVoicesNode",
+    "_meta": {
+      "title": "🎭 Character Voices"
+    }
+  },
+  "123": {
+    "inputs": {
+      "model_path": "local:IndexTTS-2",
+      "device": "cuda",
+      "emotion_alpha": 0.7,
+      "use_random": false,
+      "max_text_tokens_per_segment": 120,
+      "interval_silence": 200,
+      "temperature": 0.8,
+      "top_p": 0.8,
+      "top_k": 31,
+      "do_sample": true,
+      "length_penalty": 0,
+      "num_beams": 2,
+      "repetition_penalty": 9.5,
+      "max_mel_tokens": 1200,
+      "use_fp16": true,
+      "use_deepspeed": false,
+      "use_cuda_kernel": "true",
+      "use_torch_compile": false,
+      "use_accel": true,
+      "stream_return": false,
+      "more_segment_before": 0,
+      "low_vram": false,
+      "emotion_control": [
+        "134",
+        0
+      ]
+    },
+    "class_type": "IndexTTSEngineNode",
+    "_meta": {
+      "title": "⚙️ IndexTTS-2 Engine"
+    }
+  },
+  "134": {
+    "inputs": {
+      "Happy": 0.81,
+      "Angry": 0.74,
+      "Sad": 0.59,
+      "Surprised": 0.45,
+      "Afraid": 0.27,
+      "Disgusted": 1.17,
+      "Calm": 1.02,
+      "Melancholic": 0.71,
+      "emotion_radar_canvas": ""
+    },
+    "class_type": "IndexTTSEmotionOptionsNode",
+    "_meta": {
+      "title": "🌈 IndexTTS-2 Emotion Vectors"
+    }
+  }
+}

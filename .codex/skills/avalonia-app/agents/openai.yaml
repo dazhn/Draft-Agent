@@ -1,0 +1,4 @@
+interface:
+  display_name: "Avalonia App"
+  short_description: "Build and maintain the Avalonia desktop app"
+  default_prompt: "Use $avalonia-app to develop the Draft Agent Avalonia desktop application."

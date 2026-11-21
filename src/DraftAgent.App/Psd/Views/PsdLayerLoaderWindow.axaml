@@ -1,0 +1,430 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DraftAgent.App.Psd.ViewModels"
+        x:Class="DraftAgent.App.Psd.Views.PsdLayerLoaderWindow"
+        x:DataType="vm:PsdLayerLoaderViewModel"
+        Width="1180"
+        Height="760"
+        MinWidth="960"
+        MinHeight="640"
+        Title="PSD Layer Loader"
+        WindowDecorations="Full"
+        CanResize="True"
+        Background="#0D1117"
+        Foreground="#E6EDF3"
+        FontFamily="Inter, Segoe UI, Microsoft YaHei">
+  <Window.Styles>
+    <Style Selector="TextBlock">
+      <Setter Property="Foreground" Value="#E6EDF3" />
+    </Style>
+    <Style Selector="TextBlock.muted">
+      <Setter Property="Foreground" Value="#8B949E" />
+    </Style>
+    <Style Selector="Border.panel">
+      <Setter Property="Background" Value="#161B22" />
+      <Setter Property="BorderBrush" Value="#30363D" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="6" />
+    </Style>
+    <Style Selector="Button">
+      <Setter Property="Background" Value="#21262D" />
+      <Setter Property="Foreground" Value="#E6EDF3" />
+      <Setter Property="BorderBrush" Value="#30363D" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="5" />
+      <Setter Property="Padding" Value="10,7" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+    <Style Selector="Button:pointerover">
+      <Setter Property="Background" Value="#30363D" />
+      <Setter Property="BorderBrush" Value="#6E7681" />
+    </Style>
+    <Style Selector="Button:disabled">
+      <Setter Property="Opacity" Value="0.45" />
+    </Style>
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="#238636" />
+      <Setter Property="Foreground" Value="#FFFFFF" />
+      <Setter Property="BorderBrush" Value="#2EA043" />
+    </Style>
+    <Style Selector="Button.primary:pointerover">
+      <Setter Property="Background" Value="#2EA043" />
+      <Setter Property="BorderBrush" Value="#3FB950" />
+    </Style>
+    <Style Selector="Button.modeButton">
+      <Setter Property="MinWidth" Value="64" />
+      <Setter Property="Height" Value="30" />
+      <Setter Property="Padding" Value="10,4" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="Button.modeButton.active">
+      <Setter Property="Background" Value="#1F6FEB" />
+      <Setter Property="BorderBrush" Value="#58A6FF" />
+      <Setter Property="Foreground" Value="#FFFFFF" />
+    </Style>
+    <Style Selector="Button.browserTab">
+      <Setter Property="Height" Value="34" />
+      <Setter Property="Margin" Value="0,0,0,6" />
+      <Setter Property="Padding" Value="10,4" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="Background" Value="#0D1117" />
+      <Setter Property="BorderBrush" Value="#30363D" />
+      <Setter Property="FontSize" Value="12" />
+    </Style>
+    <Style Selector="Button.browserTab.active">
+      <Setter Property="Background" Value="#111D2F" />
+      <Setter Property="BorderBrush" Value="#58A6FF" />
+      <Setter Property="Foreground" Value="#D2E5FF" />
+    </Style>
+    <Style Selector="Button.treeToggle">
+      <Setter Property="Width" Value="22" />
+      <Setter Property="Height" Value="24" />
+      <Setter Property="MinWidth" Value="22" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Margin" Value="0,0,4,0" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="Foreground" Value="#8B949E" />
+      <Setter Property="FontSize" Value="13" />
+    </Style>
+    <Style Selector="Button.treeToggle:pointerover">
+      <Setter Property="Background" Value="#21262D" />
+      <Setter Property="BorderBrush" Value="#30363D" />
+    </Style>
+    <Style Selector="Button.thumbnailCard">
+      <Setter Property="Width" Value="96" />
+      <Setter Property="Margin" Value="0,0,12,14" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="0" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="VerticalContentAlignment" Value="Stretch" />
+    </Style>
+    <Style Selector="Button.thumbnailCard:pointerover">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+    <Style Selector="Button.thumbnailCard.selected">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="Border.thumbnailFrame">
+      <Setter Property="Background" Value="#010409" />
+      <Setter Property="BorderBrush" Value="#30363D" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="ClipToBounds" Value="True" />
+    </Style>
+    <Style Selector="Button.thumbnailCard:pointerover Border.thumbnailFrame">
+      <Setter Property="BorderBrush" Value="#6E7681" />
+    </Style>
+    <Style Selector="Border.thumbnailFrame.selected">
+      <Setter Property="Background" Value="#111D2F" />
+      <Setter Property="BorderBrush" Value="#58A6FF" />
+      <Setter Property="BorderThickness" Value="2" />
+    </Style>
+  </Window.Styles>
+
+  <Grid ColumnDefinitions="260,*"
+        Margin="12"
+        ColumnSpacing="12"
+        Background="#0D1117">
+    <Border Grid.Column="0"
+            Classes="panel"
+            Padding="12">
+      <Grid RowDefinitions="Auto,Auto,Auto,*,Auto"
+            RowSpacing="10">
+        <StackPanel Grid.Row="0"
+                    Spacing="4">
+          <TextBlock Text="{Binding DocumentTitle}"
+                     FontSize="15"
+                     FontWeight="Bold"
+                     TextTrimming="CharacterEllipsis" />
+          <TextBlock Text="{Binding DocumentDetails}"
+                     Classes="muted"
+                     FontSize="12"
+                     TextWrapping="Wrap" />
+        </StackPanel>
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,Auto"
+              ColumnSpacing="8">
+          <Button Grid.Column="0"
+                  Classes="primary"
+                  IsVisible="{Binding !IsComponentRequestMode}"
+                  Click="OnLoadPsdClicked">
+            加载 PSD
+          </Button>
+          <Button Grid.Column="1"
+                  IsVisible="{Binding !IsComponentRequestMode}"
+                  IsEnabled="{Binding CanExportPreview}"
+                  Click="OnExportPngClicked">
+            PNG
+          </Button>
+          <Button Grid.Column="0"
+                  Classes="primary"
+                  IsVisible="{Binding IsComponentRequestMode}"
+                  IsEnabled="{Binding CanExportPreview}"
+                  Click="OnConfirmComponentRequestClicked">
+            Confirm
+          </Button>
+          <Button Grid.Column="1"
+                  IsVisible="{Binding IsComponentRequestMode}"
+                  Click="OnCancelComponentRequestClicked">
+            Cancel
+          </Button>
+        </Grid>
+
+        <StackPanel Grid.Row="2"
+                    Spacing="8">
+          <Grid ColumnDefinitions="*,Auto"
+                ColumnSpacing="8">
+            <TextBlock Text="当前图层组"
+                       FontSize="14"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center" />
+            <Button Grid.Column="1"
+                    Classes="modeButton"
+                    Content="修改模板"
+                    IsVisible="{Binding CanConfigureLayerMatch}"
+                    Click="OnConfigureLayerMatchClicked" />
+          </Grid>
+          <TextBlock Text="{Binding LayerMatchTemplateSummary}"
+                     Classes="muted"
+                     FontSize="12"
+                     TextWrapping="Wrap" />
+          <TextBlock Text="{Binding BreadcrumbText}"
+                     Classes="muted"
+                     FontSize="12"
+                     TextWrapping="Wrap" />
+          <Grid ColumnDefinitions="*,Auto,Auto"
+                ColumnSpacing="6">
+            <Button Grid.Column="0"
+                    Click="OnNavigateUpClicked">
+              上一级
+            </Button>
+            <Button Grid.Column="1"
+                    Classes="modeButton"
+                    Classes.active="{Binding IsSingleSelect}"
+                    Click="OnSingleModeClicked">
+              单选
+            </Button>
+            <Button Grid.Column="2"
+                    Classes="modeButton"
+                    Classes.active="{Binding IsMultiSelect}"
+                    Click="OnMultiModeClicked">
+              多选
+            </Button>
+          </Grid>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="3"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+          <StackPanel>
+            <TextBlock Text="图层组"
+                       Classes="muted"
+                       FontSize="12"
+                       Margin="0,0,0,6" />
+            <ItemsControl ItemsSource="{Binding GroupTabs}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:PsdBrowserTabViewModel">
+                  <Button Classes="browserTab"
+                          Classes.active="{Binding IsSelected}"
+                          Click="OnGroupTabClicked">
+                    <Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+                      <Border Grid.Column="0"
+                              Width="{Binding IndentWidth}" />
+                      <Button Grid.Column="1"
+                              Classes="treeToggle"
+                              IsEnabled="{Binding HasChildren}"
+                              Click="OnGroupExpandClicked">
+                        <TextBlock Text="{Binding ExpandGlyph}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                      </Button>
+                      <TextBlock Grid.Column="2"
+                                 Text="{Binding DisplayName}"
+                                 FontWeight="SemiBold"
+                                 VerticalAlignment="Center"
+                                 TextTrimming="CharacterEllipsis" />
+                      <TextBlock Grid.Column="3"
+                                 Text="{Binding MatchRoleText}"
+                                 Foreground="#58A6FF"
+                                 FontSize="11"
+                                 FontWeight="SemiBold"
+                                 Margin="8,0,0,0"
+                                 IsVisible="{Binding HasMatchRole}" />
+                      <TextBlock Grid.Column="4"
+                                 Text="{Binding CountSummary}"
+                                 Classes="muted"
+                                 Margin="8,0,0,0" />
+                    </Grid>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </ScrollViewer>
+
+        <TextBlock Grid.Row="4"
+                   Text="{Binding SelectionSummary}"
+                   Classes="muted"
+                   FontSize="12"
+                   TextWrapping="Wrap" />
+      </Grid>
+    </Border>
+
+    <Grid Grid.Column="1"
+          RowDefinitions="*,5,0.38*"
+          RowSpacing="12">
+      <Border Grid.Row="0"
+              Classes="panel"
+              ClipToBounds="True"
+              PointerPressed="OnPreviewPointerPressed">
+        <Grid Background="#0B0F14">
+          <Image Source="{Binding PreviewBitmap}"
+                 Stretch="Uniform"
+                 HorizontalAlignment="Center"
+                 VerticalAlignment="Center"
+                 Margin="18" />
+          <StackPanel HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Spacing="8"
+                      IsVisible="{Binding IsPreviewPlaceholderVisible}">
+            <TextBlock Text="未加载 PSD"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding PreviewMessage}"
+                       Classes="muted"
+                       FontSize="13"
+                       MaxWidth="340"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap" />
+          </StackPanel>
+          <Border HorizontalAlignment="Right"
+                  VerticalAlignment="Bottom"
+                  Background="#161B22"
+                  BorderBrush="#30363D"
+                  BorderThickness="1"
+                  CornerRadius="5"
+                  Padding="9,5"
+                  Margin="12"
+                  IsVisible="{Binding CanExportPreview}">
+            <TextBlock Text="拖出保存 PNG"
+                       Classes="muted"
+                       FontSize="12" />
+          </Border>
+        </Grid>
+      </Border>
+
+      <GridSplitter Grid.Row="1"
+                    Height="5"
+                    HorizontalAlignment="Stretch"
+                    Background="#30363D"
+                    ResizeDirection="Rows" />
+
+      <Border Grid.Row="2"
+              Classes="panel"
+              Padding="12">
+        <Grid RowDefinitions="Auto,*"
+              RowSpacing="8">
+          <TextBlock Grid.Row="0"
+                     Text="图层缩略图"
+                     FontSize="14"
+                     FontWeight="Bold" />
+
+          <ScrollViewer Grid.Row="1"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding LayerThumbnails}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:PsdLayerThumbnailViewModel">
+                  <Button Classes="thumbnailCard"
+                          Classes.selected="{Binding IsSelected}"
+                          Click="OnLayerThumbnailClicked"
+                          DoubleTapped="OnLayerThumbnailDoubleTapped">
+                    <Grid RowDefinitions="Auto,Auto"
+                          RowSpacing="6">
+                      <Border Grid.Row="0"
+                              Classes="thumbnailFrame"
+                              Classes.selected="{Binding IsSelected}"
+                              Width="96"
+                              Height="96">
+                        <Grid>
+                          <Image Source="{Binding ThumbnailBitmap}"
+                                 Stretch="Uniform"
+                                 Margin="5" />
+                          <Border HorizontalAlignment="Left"
+                                  VerticalAlignment="Top"
+                                  Background="#21262D"
+                                  BorderBrush="#30363D"
+                                  BorderThickness="1"
+                                  CornerRadius="4"
+                                  Padding="5,2"
+                                  Margin="6">
+                            <TextBlock Text="{Binding TypeBadge}"
+                                       Foreground="#E6EDF3"
+                                       FontSize="10"
+                                       FontWeight="SemiBold" />
+                          </Border>
+                          <Button HorizontalAlignment="Right"
+                                  VerticalAlignment="Top"
+                                  Width="28"
+                                  Height="24"
+                                  MinWidth="28"
+                                  Padding="0"
+                                  Margin="0,6,6,0"
+                                  Background="#21262D"
+                                  BorderBrush="#30363D"
+                                  IsVisible="{Binding CanToggleVisibility}"
+                                  Click="OnLayerVisibilityClicked">
+                            <TextBlock Text="{Binding VisibilityGlyph}"
+                                       FontSize="12"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                          </Button>
+                          <Border Width="9"
+                                  Height="9"
+                                  CornerRadius="5"
+                                  Background="#3FB950"
+                                  BorderBrush="#0D1117"
+                                  BorderThickness="1"
+                                  HorizontalAlignment="Right"
+                                  VerticalAlignment="Top"
+                                  Margin="0,7,7,0"
+                                  IsVisible="{Binding ShowsVisibleDot}" />
+                        </Grid>
+                      </Border>
+                      <TextBlock Grid.Row="1"
+                                 Text="{Binding Name}"
+                                 FontSize="12"
+                                 FontWeight="SemiBold"
+                                 TextAlignment="Center"
+                                 TextWrapping="NoWrap"
+                                 TextTrimming="CharacterEllipsis"
+                                 VerticalAlignment="Center" />
+                    </Grid>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</Window>
+

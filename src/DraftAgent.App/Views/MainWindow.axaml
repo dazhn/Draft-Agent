@@ -1,0 +1,698 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DraftAgent.App.ViewModels"
+        xmlns:views="using:DraftAgent.App.Views"
+        xmlns:automation="clr-namespace:Avalonia.Automation;assembly=Avalonia.Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DesignWidth="1560"
+        d:DesignHeight="940"
+        x:Class="DraftAgent.App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="1560"
+        Height="940"
+        MinWidth="1220"
+        MinHeight="780"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="Draft Agent"
+        PointerMoved="MoveWorkbenchDragGhost"
+        PointerReleased="FinishWorkbenchDrag">
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Resources>
+        <DataTemplate x:Key="BindingTargetCardTemplate" x:DataType="vm:BindingTargetViewModel">
+            <Border Classes="bindingCard compactBindingCard" Margin="0,0,0,7">
+                <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="6">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6" MinHeight="32">
+                        <Grid VerticalAlignment="Center">
+                            <TextBox Text="{Binding EditableDisplayName, Mode=TwoWay}"
+                                     Classes="bindingTargetNameEditor"
+                                     IsVisible="{Binding IsEditingDisplayName}"
+                                     IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                     KeyDown="BindingTargetNameKeyDown"
+                                     Tag="{Binding}"
+                                     views:BindingTargetNameEditFocus.IsEditing="{Binding IsEditingDisplayName}"/>
+                            <TextBlock Text="{Binding DisplayName}"
+                                       FontSize="17"
+                                       FontWeight="SemiBold"
+                                       TextTrimming="CharacterEllipsis"
+                                       VerticalAlignment="Center"
+                                       IsVisible="{Binding !IsEditingDisplayName}"
+                                       Tag="{Binding}"
+                                       PointerPressed="BeginBindingTargetNameEdit"/>
+                        </Grid>
+                        <Button Grid.Column="1"
+                                Classes="compact"
+                                Content="{Binding RenameButtonText}"
+                                IsVisible="{Binding CanEditDisplayName}"
+                                IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                Tag="{Binding}"
+                                VerticalAlignment="Center"
+                                Click="ToggleBindingTargetNameEdit"/>
+                    </Grid>
+                    <Grid Grid.Row="1"
+                          ColumnDefinitions="*,60"
+                          ColumnSpacing="6"
+                          IsVisible="{Binding SupportsImage}">
+                        <Border Classes="previewTile bindingPreviewTile"
+                                IsVisible="{Binding !UsesLargeBindingPreview}"
+                                Tag="{Binding}">
+                            <Grid>
+                                <Image Source="{Binding ImagePreviewSource, Converter={StaticResource ImageAssetPreviewConverter}}"
+                                       Stretch="Uniform"
+                                       IsVisible="{Binding BindingPreviewShowsImage}"/>
+                                <StackPanel VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Spacing="1"
+                                            IsVisible="{Binding BindingPreviewShowsText}">
+                                    <TextBlock Text="{Binding BindingPreviewTitle}"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Center"/>
+                                    <TextBlock Text="{Binding BindingPreviewSubtitle}"
+                                               Classes="muted small"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <Border Classes="previewTile bindingPreviewTileLarge"
+                                IsVisible="{Binding UsesLargeBindingPreview}"
+                                Tag="{Binding}">
+                            <Grid>
+                                <Image Source="{Binding ImagePreviewSource, Converter={StaticResource ImageAssetPreviewConverter}}"
+                                       Stretch="Uniform"
+                                       IsVisible="{Binding BindingPreviewShowsImage}"/>
+                                <StackPanel VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Spacing="1"
+                                            IsVisible="{Binding BindingPreviewShowsText}">
+                                    <TextBlock Text="{Binding BindingPreviewTitle}"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Center"/>
+                                    <TextBlock Text="{Binding BindingPreviewSubtitle}"
+                                               Classes="muted small"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                        <StackPanel Grid.Column="1"
+                                    Spacing="6"
+                                    VerticalAlignment="Top">
+                            <Button Classes="compact bindingActionButton"
+                                    Content="选择"
+                                    IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                    Tag="{Binding}"
+                                    Click="ChooseImageFile"/>
+                            <Button Classes="compact bindingActionButton"
+                                    Content="图层"
+                                    IsVisible="{Binding SupportsPsd}"
+                                    IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                    Tag="{Binding}"
+                                    Click="ChoosePsdFile"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="2"
+                          RowDefinitions="Auto,Auto"
+                          RowSpacing="6"
+                          IsVisible="{Binding ShowVoiceBindingControls}">
+                        <Grid ColumnDefinitions="*,56"
+                              ColumnSpacing="5"
+                              HorizontalAlignment="Stretch">
+                            <ComboBox ItemsSource="{Binding $parent[Window].DataContext.VoiceReferenceOptions}"
+                                      SelectedItem="{Binding VoiceAsset, Mode=TwoWay}"
+                                      SelectionChanged="VoiceReferenceSelectionChanged"
+                                      IsEnabled="{Binding CanEditVoiceBinding}"
+                                      HorizontalAlignment="Stretch"/>
+                            <Button Grid.Column="1"
+                                    Classes="compact"
+                                    Content="试听"
+                                    IsEnabled="{Binding CanPreviewVoiceBinding}"
+                                    HorizontalAlignment="Stretch"
+                                    Command="{Binding $parent[Window].DataContext.PreviewVoiceCommand}"
+                                    CommandParameter="{Binding}"/>
+                        </Grid>
+                        <Grid Grid.Row="1"
+                              ColumnDefinitions="*,56"
+                              ColumnSpacing="5"
+                              HorizontalAlignment="Stretch">
+                            <TextBox Text="{Binding VoiceReferenceText, Mode=TwoWay}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MinHeight="30"
+                                     MaxHeight="38"
+                                     PlaceholderText="没有同名文本文件时输入临时参考文本"
+                                     IsEnabled="{Binding CanEditVoiceReferenceText}"
+                                     HorizontalAlignment="Stretch"
+                                     ToolTip.Tip="有同名 .reference.txt / .txt 时按文件锁定；没有时可临时输入并随本次 workflow 提交。"/>
+                            <Button Grid.Column="1"
+                                    Classes="compact"
+                                    Content="保存"
+                                    IsEnabled="False"
+                                    HorizontalAlignment="Stretch"
+                                    ToolTip.Tip="要持久保存请在音频旁边建立同名 .reference.txt 或 .txt。"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NarrationBindingTargetRowTemplate" x:DataType="vm:BindingTargetViewModel">
+            <Border Classes="bindingCard narrationVoiceRow" Margin="0,0,0,7">
+                <Grid ColumnDefinitions="70,*,56"
+                      RowDefinitions="Auto,Auto"
+                      ColumnSpacing="6"
+                      RowSpacing="6">
+                    <TextBlock Text="{Binding DisplayName}"
+                               FontSize="17"
+                               FontWeight="SemiBold"
+                               TextTrimming="CharacterEllipsis"
+                               VerticalAlignment="Center"/>
+                    <ComboBox Grid.Column="1"
+                              ItemsSource="{Binding $parent[Window].DataContext.VoiceReferenceOptions}"
+                              SelectedItem="{Binding VoiceAsset, Mode=TwoWay}"
+                              SelectionChanged="VoiceReferenceSelectionChanged"
+                              IsEnabled="{Binding CanEditVoiceBinding}"
+                              HorizontalAlignment="Stretch"/>
+                    <Button Grid.Column="2"
+                            Classes="compact"
+                            Content="试听"
+                            IsEnabled="{Binding CanPreviewVoiceBinding}"
+                            HorizontalAlignment="Stretch"
+                            Command="{Binding $parent[Window].DataContext.PreviewVoiceCommand}"
+                            CommandParameter="{Binding}"/>
+                    <TextBox Grid.Row="1"
+                             Grid.Column="1"
+                             Text="{Binding VoiceReferenceText, Mode=TwoWay}"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"
+                             MinHeight="30"
+                             MaxHeight="38"
+                             PlaceholderText="没有同名文本文件时输入临时参考文本"
+                             IsEnabled="{Binding CanEditVoiceReferenceText}"
+                             HorizontalAlignment="Stretch"
+                             ToolTip.Tip="有同名 .reference.txt / .txt 时按文件锁定；没有时可临时输入并随本次 workflow 提交。"/>
+                    <Button Grid.Row="1"
+                            Grid.Column="2"
+                            Classes="compact"
+                            Content="保存"
+                            IsEnabled="False"
+                            HorizontalAlignment="Stretch"
+                            ToolTip.Tip="要持久保存请在音频旁边建立同名 .reference.txt 或 .txt。"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Border Classes="shell">
+            <Grid RowDefinitions="Auto,*" Margin="12" RowSpacing="10">
+                <Border Grid.Row="0" Classes="appHeader" Padding="18,10">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <Grid ColumnDefinitions="Auto,260,*"
+                              ColumnSpacing="18"
+                              VerticalAlignment="Center">
+                            <TextBlock Text="Draft Agent"
+                                       FontSize="26"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="2"
+                                        VerticalAlignment="Center"
+                                        Spacing="2">
+                                <TextBlock Text="{Binding WorkspaceProjectMeta}"
+                                           Classes="muted small"
+                                           TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding StatusText}"
+                                           Classes="muted"
+                                           TextWrapping="Wrap"
+                                           MaxLines="5"/>
+                            </StackPanel>
+                        </Grid>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <Button Content="打开" Click="ChooseWorkspaceProjectFolder"/>
+                            <Button Classes="primary" Content="保存" Click="SaveWorkbenchEdits"/>
+                            <Button Content="设置" Click="OpenAiSettingsWindow"/>
+                            <Button Content="角色管理" Command="{Binding ToggleBindingPanelCommand}"/>
+                            <Button Classes="primary" Content="{Binding TtsSynthesisActionText}" Click="SynthesizeAllVoices"/>
+                            <Button Content="导出" Command="{Binding ExportProjectCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="1" ColumnDefinitions="360,*" ColumnSpacing="10">
+                    <Border Grid.Column="0" Classes="panel layoutPanel">
+                        <Grid RowDefinitions="56,*">
+                            <Border Classes="sectionHeader" Padding="12,8">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="文稿" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                        <Button Content="解说优化" Command="{Binding OptimizeScriptNarrationCommand}"/>
+                                        <Button Classes="primary" Content="分析" Command="{Binding AnalyzeScriptCommand}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Row="1" Classes="scriptCanvas" Padding="12">
+                                <Grid RowDefinitions="Auto,*" RowSpacing="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Text="粘贴小说或短视频文稿" Classes="muted small" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+                                            <Button Classes="compact" Content="示例" Command="{Binding LoadSampleCommand}"/>
+                                            <Button Classes="compact" Content="清空" Command="{Binding ClearScriptCommand}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBox Grid.Row="1"
+                                             Classes="scriptEditor"
+                                             Text="{Binding ScriptText, Mode=TwoWay}"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             VerticalContentAlignment="Top"
+                                             PlaceholderText="粘贴原文..."
+                                             IsVisible="{Binding !HasMultipleScriptDrafts}"/>
+                                    <TabControl Grid.Row="1"
+                                                Classes="scriptDraftTabs"
+                                                ItemsSource="{Binding ScriptDrafts}"
+                                                SelectedItem="{Binding SelectedScriptDraft, Mode=TwoWay}"
+                                                IsVisible="{Binding HasMultipleScriptDrafts}">
+                                        <TabControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:ScriptDraftTabViewModel">
+                                                <Grid Width="74"
+                                                      Height="24"
+                                                      ColumnDefinitions="*,18"
+                                                      ColumnSpacing="4">
+                                                    <TextBlock Text="{Binding Title}"
+                                                               FontSize="12"
+                                                               FontWeight="SemiBold"
+                                                               VerticalAlignment="Center"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    <Button Grid.Column="1"
+                                                            Classes="scriptTabClose"
+                                                            Content="×"
+                                                            IsVisible="{Binding CanClose}"
+                                                            Command="{Binding $parent[Window].DataContext.CloseScriptDraftCommand}"
+                                                            CommandParameter="{Binding}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </TabControl.ItemTemplate>
+                                        <TabControl.ContentTemplate>
+                                            <DataTemplate x:DataType="vm:ScriptDraftTabViewModel">
+                                                <TextBox Classes="scriptEditor"
+                                                         Text="{Binding Text, Mode=TwoWay}"
+                                                         AcceptsReturn="True"
+                                                         TextWrapping="Wrap"
+                                                         VerticalContentAlignment="Top"
+                                                         PlaceholderText="粘贴原文..."/>
+                                            </DataTemplate>
+                                        </TabControl.ContentTemplate>
+                                    </TabControl>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="1" Classes="panel layoutPanel">
+                        <Grid RowDefinitions="56,*">
+                            <Border Classes="sectionHeader" Padding="12,8">
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <StackPanel Spacing="1">
+                                        <TextBlock Text="工作台" FontSize="22" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{Binding ProjectMeta}" Classes="muted small"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                        <Border Classes="metric"><TextBlock Text="{Binding TtsQueueMeta}"/></Border>
+                                        <Button Content="新增场景"
+                                                Command="{Binding AddSceneCommand}"
+                                                IsEnabled="{Binding CanEditWorkbenchStructure}"/>
+                                        <Button Classes="compact"
+                                                Content="PSD图层AI匹配"
+                                                Command="{Binding MatchPsdExpressionLayersCommand}"
+                                                IsEnabled="{Binding CanEditWorkbenchStructure}"/>
+                                        <Button Classes="compact" Content="展开" Command="{Binding ExpandAllWorkbenchScenesCommand}"/>
+                                        <Button Classes="compact" Content="折叠" Command="{Binding CollapseAllWorkbenchScenesCommand}"/>
+                                        <Button Content="撤销" Command="{Binding UndoWorkbenchCommand}"/>
+                                        <Button Content="重做" Command="{Binding RedoWorkbenchCommand}"/>
+                                        <Button Classes="roundResetButton"
+                                                Content="↶"
+                                                ToolTip.Tip="重置工作台修改"
+                                                Command="{Binding RevertWorkbenchCommand}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Row="1" Classes="workbenchCanvas" Padding="10">
+                                <ListBox Classes="workbenchSceneList"
+                                         x:Name="WorkbenchSceneList"
+                                         ItemsSource="{Binding WorkbenchDisplayItems}"
+                                         SelectionMode="Single"
+                                         ScrollViewer.IsScrollChainingEnabled="True">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Vertical" CacheLength="1"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.DataTemplates>
+                                        <DataTemplate DataType="vm:WorkbenchSceneHeaderDisplayItem"
+                                                      x:DataType="vm:WorkbenchSceneHeaderDisplayItem">
+                                                <Border Classes="referenceScene"
+                                                        Classes.dragSourceActive="{Binding Scene.IsDragSourceActive}"
+                                                        Tag="{Binding Scene}"
+                                                        PointerEntered="PreviewWorkbenchDragTarget"
+                                                        views:WorkbenchDragTarget.Target="{Binding Scene}">
+                                                    <Border Classes="referenceSceneHeader" Padding="8,4"
+                                                            HorizontalAlignment="Stretch">
+                                                        <Grid ColumnDefinitions="38,38,*,Auto,Auto,38" ColumnSpacing="8"
+                                                              HorizontalAlignment="Stretch"
+                                                              VerticalAlignment="Center">
+                                                            <Button Classes="sceneDragHandle"
+                                                                    Tag="{Binding Scene}"
+                                                                    PointerPressed="StartWorkbenchSceneDrag"
+                                                                    IsEnabled="{Binding $parent[Window].DataContext.CanDragWorkbench}"
+                                                                    views:WorkbenchDragTarget.Target="{Binding Scene}"
+                                                                    automation:AutomationProperties.AutomationId="WorkbenchSceneDragHandle"
+                                                                    automation:AutomationProperties.Name="{Binding Scene.SceneName}"
+                                                                    automation:AutomationProperties.HelpText="拖动场景">
+                                                                <TextBlock Text="::"
+                                                                           FontSize="13"
+                                                                           FontWeight="SemiBold"
+                                                                           HorizontalAlignment="Center"
+                                                                           VerticalAlignment="Center"/>
+                                                            </Button>
+
+                                                             <Border Grid.Column="1"
+                                                                     Classes="sceneThumb" Width="38" Height="38"
+                                                                     Tag="{Binding Scene}"
+                                                                     IsHitTestVisible="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                                                     views:WorkbenchPreviewToolTip.IsEnabled="True"
+                                                                     views:WorkbenchPreviewToolTip.ImagePath="{Binding Scene.SelectedScenePreviewAsset}"
+                                                                     views:WorkbenchPreviewToolTip.Label="{Binding Scene.SceneImagePreviewLabel}"
+                                                                     views:WorkbenchPreviewToolTip.HasImage="{Binding Scene.HasSceneImagePreview}"
+                                                                     views:WorkbenchPreviewToolTip.PreviewWidth="300"
+                                                                     views:WorkbenchPreviewToolTip.PreviewHeight="210"
+                                                                     PointerPressed="ChooseSceneImageFileFromThumbnail">
+                                                                <Grid>
+                                                                    <Image Source="{Binding Scene.SelectedScenePreviewAsset, Converter={StaticResource ImageAssetPreviewConverter}, ConverterParameter=48}"
+                                                                           Stretch="Uniform"
+                                                                           IsVisible="{Binding Scene.HasSceneImagePreview}"/>
+                                                                    <TextBlock Text="图"
+                                                                               FontSize="12"
+                                                                               FontWeight="SemiBold"
+                                                                               VerticalAlignment="Center"
+                                                                               HorizontalAlignment="Center"
+                                                                               IsVisible="{Binding Scene.HasNoSceneImagePreview}"/>
+                                                                </Grid>
+                                                            </Border>
+
+                                                            <Grid Grid.Column="2">
+                                                                <TextBox Classes="sceneTitleInput"
+                                                                         Text="{Binding Scene.SceneName, Mode=TwoWay}"
+                                                                         IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                                                         FontWeight="SemiBold"
+                                                                         TextWrapping="NoWrap"
+                                                                         MaxLines="1"
+                                                                         VerticalAlignment="Center"/>
+                                                            </Grid>
+
+                                                            <TextBlock Grid.Column="3"
+                                                                       Text="{Binding Scene.SceneLabel}"
+                                                                       Classes="muted small"
+                                                                       VerticalAlignment="Center"
+                                                                       Margin="8,0,0,0"/>
+                                                             <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                                                 <Button Classes="danger sceneSquareButton" Content="删"
+                                                                         DataContext="{Binding Scene}"
+                                                                         IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                                                         Click="ConfirmRemoveScene"/>
+                                                                <Button Classes="sceneSquareButton" Content="+"
+                                                                        Command="{Binding $parent[Window].DataContext.AddNarrationRowCommand}"
+                                                                        IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                                                        CommandParameter="{Binding Scene}"/>
+                                                            </StackPanel>
+                                                            <Button Grid.Column="5"
+                                                                    Classes="sceneCollapseButton"
+                                                                    Content="{Binding Scene.CollapseGlyph}"
+                                                                    Command="{Binding Scene.ToggleExpandedCommand}"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </Border>
+                                        </DataTemplate>
+
+                                        <DataTemplate DataType="vm:WorkbenchEmptySceneDisplayItem"
+                                                      x:DataType="vm:WorkbenchEmptySceneDisplayItem">
+                                                <Border Classes="eventTable emptySceneDropTarget" Padding="10,10,10,10"
+                                                        PointerEntered="PreviewWorkbenchDragTarget"
+                                                        Tag="{Binding Scene}"
+                                                        views:WorkbenchDragTarget.Target="{Binding Scene}">
+                                                    <TextBlock Text="拖到这里添加台词"
+                                                               Classes="muted small"
+                                                               HorizontalAlignment="Center"/>
+                                                </Border>
+                                        </DataTemplate>
+
+                                        <DataTemplate DataType="vm:WorkbenchRowDisplayItem"
+                                                      x:DataType="vm:WorkbenchRowDisplayItem">
+                                                <Grid RowDefinitions="Auto,Auto">
+                                                    <Border Classes="eventRow"
+                                                            Classes.selected="{Binding Row.IsSelected}"
+                                                            Classes.dragSourceActive="{Binding Row.IsDragSourceActive}"
+                                                            IsHitTestVisible="{Binding !Row.IsDragSourceActive}"
+                                                            PointerEntered="PreviewWorkbenchDragTarget"
+                                                            PointerPressed="SelectWorkbenchRow"
+                                                            Tag="{Binding}"
+                                                            views:WorkbenchDragTarget.Target="{Binding Row}">
+                                                        <Grid ColumnDefinitions="46,Auto,36,66,*,84,38" ColumnSpacing="6">
+                                                            <Border Classes="rowIndexCell"
+                                                                    PointerPressed="StartWorkbenchRowDrag"
+                                                                    IsHitTestVisible="{Binding $parent[Window].DataContext.CanDragWorkbench}"
+                                                                    Tag="{Binding}">
+                                                                <TextBlock Text="{Binding Row.OrderLabel}"
+                                                                           Classes="rowNumber"
+                                                                           HorizontalAlignment="Center"
+                                                                           VerticalAlignment="Center"/>
+                                                            </Border>
+
+                                                            <Border Grid.Column="1" Classes="rowObjectBox"
+                                                                    views:WorkbenchPreviewToolTip.IsEnabled="True"
+                                                                    views:WorkbenchPreviewToolTip.ImagePath="{Binding Row.InlineObjectPreviewSource}"
+                                                                    views:WorkbenchPreviewToolTip.Label="{Binding Row.InlineObjectPreviewLabel}"
+                                                                    views:WorkbenchPreviewToolTip.HasImage="{Binding Row.HasInlineObjectPreviewImage}"
+                                                                    views:WorkbenchPreviewToolTip.PreviewWidth="260"
+                                                                    views:WorkbenchPreviewToolTip.PreviewHeight="260">
+                                                                <Grid ColumnDefinitions="Auto,*"
+                                                                      ColumnSpacing="8"
+                                                                      VerticalAlignment="Center">
+                                                                    <Grid Classes="objectThumb"
+                                                                          Width="{Binding Row.InlineObjectPreviewWidth}"
+                                                                          Height="{Binding Row.InlineObjectPreviewHeight}"
+                                                                          VerticalAlignment="Center"
+                                                                          ClipToBounds="True"
+                                                                          Tag="{Binding}"
+                                                                          PointerPressed="ToggleWorkbenchPsdLayersFromThumbnail">
+                                                                        <Image Classes="inlineObjectPreviewImage"
+                                                                               Source="{Binding Row.InlineObjectPreviewSource, Converter={StaticResource ImageAssetPreviewConverter}, ConverterParameter=32}"
+                                                                               Stretch="Uniform"
+                                                                               IsVisible="{Binding Row.HasInlineObjectPreviewImage}"/>
+                                                                        <TextBlock Text="{Binding Row.ObjectPreviewInitial}"
+                                                                                   FontSize="11"
+                                                                                   FontWeight="SemiBold"
+                                                                                   VerticalAlignment="Center"
+                                                                                   HorizontalAlignment="Center"
+                                                                                   IsVisible="{Binding Row.HasNoInlineObjectPreviewImage}"/>
+                                                                    </Grid>
+                                                                     <Grid Grid.Column="1"
+                                                                           Classes="objectNameRegion"
+                                                                           MinWidth="88"
+                                                                           VerticalAlignment="Stretch"
+                                                                           views:WorkbenchObjectNameEditorHost.IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                                                           views:WorkbenchObjectNameEditorHost.CharacterNameOptions="{Binding $parent[Window].DataContext.CharacterNameOptions}">
+                                                                        <TextBlock Classes="objectNameText"
+                                                                                   Text="{Binding Row.SubjectName}"
+                                                                                   TextTrimming="CharacterEllipsis"
+                                                                                   VerticalAlignment="Center"/>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            </Border>
+
+                                                             <Border Grid.Column="2"
+                                                                     Classes="rowTypeBox"
+                                                                     IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                                                     ToolTip.Tip="{Binding Row.SourceTypeText}"
+                                                                     Tag="{Binding Row}"
+                                                                     PointerPressed="ToggleWorkbenchRowSourceType">
+                                                                <TextBlock Text="{Binding Row.SourceTypeGlyph}"
+                                                                           Classes="sourceTypeGlyph"
+                                                                           HorizontalAlignment="Center"
+                                                                           VerticalAlignment="Center"/>
+                                                            </Border>
+
+                                                            <Border Grid.Column="3"
+                                                                    Classes="rowEmotionBox"
+                                                                    IsEnabled="{Binding Row.CanEditTextAndEmotion}"
+                                                                    PointerPressed="OpenEmotionEditor"
+                                                                    Tag="{Binding}">
+                                                                <TextBlock Text="{Binding Row.EffectiveEmotionDisplayText}"
+                                                                           Classes="emotionDisplayText muted"
+                                                                           VerticalAlignment="Center"
+                                                                           TextWrapping="Wrap"
+                                                                           MaxLines="2"
+                                                                           TextTrimming="CharacterEllipsis"/>
+                                                            </Border>
+
+                                                            <Border Grid.Column="4" Classes="rowLineBox">
+                                                                <Grid views:WorkbenchLineEditorHost.IsEnabled="{Binding Row.CanEditTextAndEmotion}">
+                                                                    <TextBlock Classes="lineText"
+                                                                               Text="{Binding Row.LineText}"
+                                                                               TextWrapping="Wrap"
+                                                                               TextTrimming="CharacterEllipsis"
+                                                                               MaxLines="4"
+                                                                               VerticalAlignment="Center"
+                                                                               IsVisible="{Binding !Row.IsLineEditorActive}"/>
+                                                                </Grid>
+                                                            </Border>
+
+                                                            <Border Grid.Column="5" Classes="rowVoiceBox"
+                                                                    views:WorkbenchRowVoiceToolTip.IsEnabled="True">
+                                                                <Grid views:WorkbenchRowActionsHost.IsEnabled="True"
+                                                                      views:WorkbenchRowActionsHost.PreviewCommand="{Binding $parent[Window].DataContext.PreviewRowVoiceCommand}"
+                                                                      views:WorkbenchRowActionsHost.RegenerateCommand="{Binding $parent[Window].DataContext.RegenerateRowVoiceCommand}">
+                                                                    <TextBlock Classes="voiceState"
+                                                                               Text="{Binding Row.TtsStatusText}"
+                                                                               TextTrimming="CharacterEllipsis"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               IsVisible="{Binding !Row.HasSynthesizedVoice}"/>
+                                                                </Grid>
+                                                            </Border>
+                                                            <Button Grid.Column="6"
+                                                                    Classes="danger compact"
+                                                                    Content="删"
+                                                                    Tag="{Binding}"
+                                                                    IsEnabled="{Binding $parent[Window].DataContext.CanEditWorkbenchStructure}"
+                                                                    Click="ConfirmRemoveRow"/>
+                                                        </Grid>
+                                                    </Border>
+
+                                                    <Border Grid.Row="1" Classes="eventTable rowSceneEndDropTarget"
+                                                            IsVisible="{Binding IsLastRowInScene}"
+                                                            Height="8"
+                                                            Margin="20,0,0,6"
+                                                            PointerEntered="PreviewWorkbenchDragTarget"
+                                                            Tag="{Binding Scene}"
+                                                            views:WorkbenchDragTarget.Target="{Binding Scene}"/>
+                                                </Grid>
+                                        </DataTemplate>
+                                    </ListBox.DataTemplates>
+                                </ListBox>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+        <Border Classes="dialogScrim" IsVisible="{Binding IsBindingDialogOpen}">
+            <Grid Width="1300" MaxHeight="760" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Classes="panel" Padding="16">
+                    <Grid RowDefinitions="Auto,*" RowSpacing="12">
+                        <Grid RowDefinitions="Auto,Auto" RowSpacing="4">
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+                                <TextBlock Text="角色管理"
+                                           FontSize="20"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal"
+                                        Spacing="8"
+                                        HorizontalAlignment="Left">
+                                    <Button Classes="primary" Content="增加角色" Command="{Binding AddManagedCharacterCommand}"
+                                            IsEnabled="{Binding CanEditWorkbenchStructure}"/>
+                                    <Button Content="{Binding RoleAllVoiceRouteText}" Command="{Binding ToggleRoleAllVoiceRouteCommand}"
+                                            IsEnabled="{Binding CanEditWorkbenchStructure}"/>
+                                    <Button Content="{Binding RoleDialogueVoiceRouteText}"
+                                            Command="{Binding ToggleRoleDialogueVoiceRouteCommand}"
+                                            IsEnabled="False"
+                                            IsVisible="{Binding ShowRoleVoiceDetailRouteButtons}"/>
+                                    <Button Content="{Binding RoleSceneNarrationVoiceRouteText}"
+                                            IsEnabled="False"
+                                            IsVisible="{Binding ShowRoleVoiceDetailRouteButtons}"/>
+                                    <Button Content="{Binding RoleThoughtVoiceRouteText}"
+                                            Command="{Binding ToggleRoleThoughtVoiceRouteCommand}"
+                                            IsEnabled="{Binding CanEditWorkbenchStructure}"
+                                            IsVisible="{Binding ShowRoleVoiceDetailRouteButtons}"/>
+                                    <Button Content="{Binding RoleActionVoiceRouteText}"
+                                            Command="{Binding ToggleRoleActionVoiceRouteCommand}"
+                                            IsEnabled="{Binding CanEditWorkbenchStructure}"
+                                            IsVisible="{Binding ShowRoleVoiceDetailRouteButtons}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2"
+                                            Orientation="Horizontal"
+                                            Spacing="8"
+                                            HorizontalAlignment="Right">
+                                    <Button Content="保存" Click="SaveWorkbenchEdits"/>
+                                    <Button Content="关闭" Command="{Binding CloseBindingDialogCommand}"/>
+                                </StackPanel>
+                            </Grid>
+                            <TextBlock Grid.Row="1"
+                                       Text="先绑定默认配音，再按需把角色台词、内心或动作路由到角色参考音。"
+                                       Classes="muted"
+                                       TextWrapping="Wrap"/>
+                        </Grid>
+                        <ScrollViewer Grid.Row="1">
+                            <StackPanel Spacing="12">
+                                <StackPanel Spacing="6"
+                                            IsVisible="{Binding HasNarrationBindingTargets}">
+                                    <TextBlock Text="默认配音"
+                                               FontSize="15"
+                                               FontWeight="SemiBold"/>
+                                    <ListBox Classes="bindingTargetList"
+                                             ItemsSource="{Binding NarrationBindingTargets}"
+                                             SelectedItem="{Binding SelectedNarrationBindingTarget, Mode=TwoWay}"
+                                             SelectionMode="Single"
+                                             ItemTemplate="{StaticResource NarrationBindingTargetRowTemplate}">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical"/>
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                    </ListBox>
+                                </StackPanel>
+
+                                <StackPanel Spacing="6"
+                                            IsVisible="{Binding HasCharacterBindingTargets}">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="角色素材"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+                                        <Button Classes="compact"
+                                                Content="PSD图层模板设置"
+                                                IsVisible="{Binding HasCharacterBindingTargets}"
+                                                IsEnabled="{Binding CanConfigureSelectedCharacterPsdLayerMatch}"
+                                                ToolTip.Tip="{Binding CharacterPsdLayerMatchSettingsText}"
+                                                Tag="{Binding CharacterPsdLayerMatchTarget}"
+                                                Click="ConfigurePsdLayerMatch"/>
+                                    </StackPanel>
+                                    <ListBox Classes="bindingTargetList"
+                                             ItemsSource="{Binding CharacterBindingTargets}"
+                                             SelectedItem="{Binding SelectedCharacterBindingTarget, Mode=TwoWay}"
+                                             SelectionMode="Single"
+                                             ItemTemplate="{StaticResource BindingTargetCardTemplate}">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                    </ListBox>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Canvas x:Name="WorkbenchDragOverlay"
+                IsHitTestVisible="False"
+                ClipToBounds="False"/>
+    </Grid>
+</Window>
+
